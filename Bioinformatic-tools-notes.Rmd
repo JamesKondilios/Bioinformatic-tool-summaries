@@ -3,8 +3,7 @@ title: "Bioinformatics Tools Notes"
 output: html_notebook
 ---
 
-
-#AXE: 
+*AXE:*
 Axe is a read de-multiplexer, useful in situations where sequence reads contain the barcodes that uniquely distinguish samples. When GBS data is produced a single output file is produced containing sequence reads from all samples of a certain length. Each read has a barcode specifying which sample it belongs to. AXE matches external barcode data to the barcodes in each read. It then writes reads belonging to each sample to a seperate file. 
 ```{bash Axe, eval=FALSE}
 # working directory jk9065/gdata/rawdata/Emarg_trans345_Brachy
@@ -14,13 +13,10 @@ axe-demux -m 0 -c ON -b Emarg_trans345_Brachy.axe -f Emarginata345_Brachy5_NoInd
 ```
 
 
-#GATK4 Haplotype Caller:
+*GATK4 Haplotype Caller:*
 Call germline SNPs and indels via local re-assembly of haplotypes. It is capible of identifying SNPs and indels simultaneously via local de-novo assembly of haplotypes 
-
-:
-Variant calling is the process by which we identify variants from sequence data. The GATK4 Variant caller 
 ```{bash GATK4-VariantCaller, eval = FALSE}
 
 ```
 
-
+*GATK4 GenotypeGVCFs:*
