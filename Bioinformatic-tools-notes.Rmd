@@ -15,8 +15,11 @@ axe-demux -m 0 -c ON -b Emarg_trans345_Brachy.axe -f Emarginata345_Brachy5_NoInd
 
 *GATK4 Haplotype Caller:*
 what kind of data does it take? 
- 
-Identifys germline SNPs and indels via local re-assembly of haplotypes. It takes short-read sequencing data aligned against a reference genome. It is capible of identifying SNPs and indels simultaneously via local de-novo assembly of haplotypes. It produces a VCF or gVCF file with raw, unfiltered SNP and indel variants. 
+feed it: bam. + reference.
+Identifys germline SNPs and indels via local re-assembly of haplotypes. It takes short-read sequencing data aligned against a reference genome, however it needs decent coverage (atleast >5x). It is capible of identifying SNPs and indels simultaneously via local de-novo assembly of haplotypes. It produces a VCF or gVCF file with raw, unfiltered SNP and indel variants in the form of a pseudo series of multidimensional matrices.
+
+
+samples x snps
 ```{bash GATK4-VariantCaller, eval = FALSE}
 
 ```
