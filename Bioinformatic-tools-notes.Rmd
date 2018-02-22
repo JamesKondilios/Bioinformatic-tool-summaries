@@ -6,7 +6,7 @@ output: html_notebook
 *AXE:*
 Axe is a read de-multiplexer, useful in situations where sequence reads contain the barcodes that uniquely distinguish samples. When GBS data is produced a single output file is produced containing sequence reads from all samples of a certain length. Each read has a barcode specifying which sample it belongs to. AXE matches external barcode data to the barcodes in each read. It then writes reads belonging to each sample to a seperate file. 
 ```{bash Axe, eval=FALSE}
-# working directory jk9065/gdata/rawdata/Emarg_trans345_Brachy
+#/jk9065/gdata/rawdata/Emarg_trans345_Brachy/
 
 axe-demux -m 0 -c ON -b Emarg_trans345_Brachy.axe -f Emarginata345_Brachy5_NoIndex_L005_R1_001.fastq.gz -r Emarginata345_Brachy5_NoIndex_L005_R2_001.fastq.gz -I demuxed/
 
@@ -22,8 +22,8 @@ Identifys germline SNPs and indels via local re-assembly of haplotypes. It takes
 ```
 
 *GATK4 GenotypeGVCFs:*
-Perform joint genotyping on gVCF files produced by HaplotypeCaller.
-```{bash}
+Perform joint genotyping on gVCF files produced by HaplotypeCaller. It takes One or more HaplotypeCaller gVCFs to genotype, and outputs a combined, genotyped VCF.
+```{bash GATK4-GenotypeGVCFs, eval = FALSE}
 
 ```
 
