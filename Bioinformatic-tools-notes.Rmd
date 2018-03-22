@@ -3,8 +3,63 @@ title: "Bioinformatics Tools Notes"
 output: html_notebook
 ---
 
-*AXE:*
-Axe is a read de-multiplexer, useful in situations where sequence reads contain the barcodes that uniquely distinguish samples. When GBS data is produced a single output file is produced containing sequence reads from all samples of a certain length. Each read has a barcode specifying which sample it belongs to. AXE matches external barcode data to the barcodes in each read. It then writes reads belonging to each sample to a seperate file. 
+
+#*BEFORE ANYTHING:* <br />
+Modules allow a way to ensure multiple versions of a package are accessable. 
+```{bash Modules, eval=FALSE}
+module load <MODULE> # loads module
+module unload <MODULE> # unloads module
+module list # shows what modules are open
+module avail less # shows what modules are available
+```
+
+
+#*RUNNING SMALL JOBS ON RAIJIN* <br />
+Times out after 1 hour. 28 cpus, q is express. 
+```{bash SmallRajinJobs, eval=FALSE}
+qlogin # qlogin is an alias to qsub -I. qsub submits a job to the queue.
+SomeScript.py
+```
+
+
+#*RUNNING FAT JOBS ONB RAIJIN* <br />
+PBS - Portable batch system is the system that manages job scheduling on RAIJIN.
+`#!/bin/bash` specifies the interpreter for the program to be run. Eg python/R/bash.`#PBS` tells pbs to use line as params. -P is project. for now it dosnt matter and defaults to xe2. -q is the normal job queue. `-l walltime` specifies the time allocated for the job hh:mm:ss. `-l mem` specifies the (RAM) memory requirement. `-l ncpus` specifies the number of cpus (16 is the max?). `-l wd` specifies the job to be run from the working directory.
+ <br />
+To run the job script; `qsub script_name.sh`. - sends to compute nodes
+ <br />
+```{bash FATRajinJobs, eval=FALSE}
+#!/bin/bash
+#PBS -P xe2
+#PBS -q express
+#PBS -l walltime=24:00:00
+#PBS -l mem=31GB
+#PBS -l jobfs=400GB
+#PBS -l ncpus=16
+#PBS -l wd
+#PBS -m abe
+#PBS -M  james.kondilios@anu.edu.au
+
+module load gatk4;
+./gatk4 HaplotypeCallerSpark -R reference/Egrandis-v2-plus-chloro.2bit -I bams/J385.bam -O variantVCFs/J385_variants.g.vcf -ERC GVCF;
+
+```
+
+```{bash PBScommands, eval = FALSE}
+qsub [options] jobname 	#Submit job in the queue
+qdel jobid	#Delete job in the queue
+qalter [options] jobid	#Modify resources of the jobs which are already in the queue
+qmove destination jobid	#Move jobs between different queue (eg. normal to express)
+qselect [options]	#Select PBS batch jobs
+qstat/nqstat_anu	#Display status of PBS batch jobs
+qstat -s jobid	#See comment of the job (why is my job not running)
+
+```
+
+
+
+#*AXE:* <br />
+Axe is a read de-multiplexer, useful in situations where sequence reads contain the barcodes that uniquely distinguish samples. When GBS data is produced a single output file is produced containing sequence reads from all samples of a certain length. Each read has a barcode specifying which sample it belongs to. AXE matches external barcode data to the barcodes in each read. It then writes reads belonging to each sample to a seperate file.  <br />
 ```{bash Axe, eval=FALSE}
 #/jk9065/gdata/rawdata/Emarg_trans345_Brachy/
 
@@ -13,21 +68,45 @@ axe-demux -m 0 -c ON -b Emarg_trans345_Brachy.axe -f Emarginata345_Brachy5_NoInd
 ```
 
 
-*GATK4 Haplotype Caller:*
-what kind of data does it take? 
-feed it: bam. + reference.
-Identifys germline SNPs and indels via local re-assembly of haplotypes. It takes short-read sequencing data aligned against a reference genome, however it needs decent coverage (atleast >5x). It is capible of identifying SNPs and indels simultaneously via local de-novo assembly of haplotypes. It produces a VCF or gVCF file with raw, unfiltered SNP and indel variants in the form of a pseudo series of multidimensional matrices.
+#*GATK4 Haplotype Caller:* <br />
+what kind of data does it take?  <br />
+feed it: bam. + reference.g <br />
+Identifys germline SNPs and indels via local re-assembly of haplotypes. It takes short-read sequencing data aligned against a reference genome, however it needs decent coverage (atleast >5x). It is capible of identifying SNPs and indels simultaneously via local de-novo assembly of haplotypes. It produces a VCF or gVCF file with raw, unfiltered SNP and indel variants in the form of a pseudo series of multidimensional matrices. <br />
 
-
-samples x snps
 ```{bash GATK4-VariantCaller, eval = FALSE}
+./gatk4 HaplotypeCallerSpark -R reference/Egrandis-v2-plus-chloro.2bit -I bams/J385.bam -O variantVCFs/J385_variants.g.vcf -ERC GVCF
 
 ```
 
-*GATK4 GenotypeGVCFs:*
+#*GATK4 GenotypeGVCFs:* <br />
 Perform joint genotyping on gVCF files produced by HaplotypeCaller. It takes One or more HaplotypeCaller gVCFs to genotype, and outputs a combined, genotyped VCF.
 ```{bash GATK4-GenotypeGVCFs, eval = FALSE}
 
 ```
+
+
+
+#*Mash* <br />
+Fast genome and metagenome distance estimation using MinHash. <br />
+INPUT: fastq or fastq.gz files <br />
+OUTPUT: distance matrix <br />
+Steps: <br />
+  First makes sketches/references <br />
+  Secondly makes a distance matrix <br />
+`-p` specifies how many cores we want to use <br />
+`-t` specifies to output a table <br />
+
+```{bash Mash, eval = FALSE}
+module load mash
+mash sketch -l /g/data/xe2/projects/cip-potato/data/reads/runs/run-1/*.fastq.gz -o data/xe2/projects/cip-potato/MashReferences/ -p 28 -s 20000
+mash dist data/xe2/projects/cip-potato/MashReferences/*.msh -t -p 28
+
+
+
+```
+
+
+
+
 
 
