@@ -22,7 +22,7 @@ SomeScript.py
 ```
 
 
-#*RUNNING FAT JOBS ONB RAIJIN* <br />
+#*RUNNING FAT JOBS ON RAIJIN* <br />
 PBS - Portable batch system is the system that manages job scheduling on RAIJIN.
 `#!/bin/bash` specifies the interpreter for the program to be run. Eg python/R/bash.`#PBS` tells pbs to use line as params. -P is project. for now it dosnt matter and defaults to xe2. -q is the normal job queue. `-l walltime` specifies the time allocated for the job hh:mm:ss. `-l mem` specifies the (RAM) memory requirement. `-l ncpus` specifies the number of cpus (16 is the max?). `-l wd` specifies the job to be run from the working directory.
  <br />
@@ -91,17 +91,24 @@ Fast genome and metagenome distance estimation using MinHash. <br />
 INPUT: fastq or fastq.gz files <br />
 OUTPUT: distance matrix <br />
 Steps: <br />
-  First makes sketches/references <br />
-  Secondly makes a distance matrix <br />
+  1. First makes sketches/references <br />
+  2. Secondly makes a distance matrix <br />
 `-p` specifies how many cores we want to use <br />
 `-t` specifies to output a table <br />
 
-```{bash Mash, eval = FALSE}
+```{bash Mash_Potato1.sh, eval = FALSE}
+#PBS -P xe2
+#PBS -q expressbw
+#PBS -l walltime=06:00:00
+#PBS -l mem=31GB
+#PBS -l jobfs=400GB
+#PBS -l ncpus=28
+#PBS -l wd
+#PBS -m abe
+#PBS -M  james.kondilios@anu.edu.au
 module load mash
-mash sketch -l /g/data/xe2/projects/cip-potato/data/reads/runs/run-1/*.fastq.gz -o data/xe2/projects/cip-potato/MashReferences/ -p 28 -s 20000
-mash dist data/xe2/projects/cip-potato/MashReferences/*.msh -t -p 28
-
-
+mash sketch -o cip-spuds.msh -p $PBS_NCPUS -s 20000 /g/data/xe2/projects/cip-potato/data/reads/runs/run-1/*.fastq.gz
+mash dist cip-spuds.msh cip-spuds.msh -t -p 28 > dist.txt
 
 ```
 
