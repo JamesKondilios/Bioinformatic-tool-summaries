@@ -56,6 +56,22 @@ qstat -s jobid	#See comment of the job (why is my job not running)
 
 ```
 
+#*Installing R packages on Raijin:* <br/>
+Before anything.. These modules must be loaded:
+```{bash, eval = FALSE}
+module load curl;
+module load gcc;
+module load gdal;
+module load proj;
+module load intel-cc/2018.3.222;
+module load intel-fc/2018.3.222;
+```
+
+Then packages can be installed the normal way:
+```{r}
+install.packages("my package")
+```
+
 
 
 #*AXE:* <br />
