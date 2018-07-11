@@ -128,7 +128,30 @@ mash dist cip-spuds.msh cip-spuds.msh -t -p 28 > dist.txt
 
 ```
 
+##Seqhax (pecheck -- Checks that paired end reads match properly (also join them))
+Used for interleaving read files straight from the flow cell.
+####Written by @kdmurray91
+```{bash}
+#PBS -P xe2
+#PBS -q expressbw
+#PBS -l walltime=06:00:00
+#PBS -l mem=31GB
+#PBS -l jobfs=400GB
+#PBS -l ncpus=28
+#PBS -l wd
+#PBS -m abe
+#PBS -M  james.kondilios@anu.edu.au
 
+module load seqhax parallel
+
+# for sample in $(cat fileofsamples.txt)
+# do
+#       seqhax pecheck -o >(gzip >interleaved/${sample}.fastq.gz) simpleinput/${sample}_R1_001.fastq.gz simpleinput/${sample}_R2_001.fastq.gz
+# done
+
+cat fileofsamples.txt | parallel \
+        seqhax pecheck -o '>(gzip >interleaved/{}.fastq.gz)' simpleinput/{}_R1_001.fastq.gz simpleinput/{}_R2_001.fastq.gz
+```
 
 
 
