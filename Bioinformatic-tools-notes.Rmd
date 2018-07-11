@@ -123,7 +123,7 @@ Steps: <br />
 #PBS -m abe
 #PBS -M  james.kondilios@anu.edu.au
 module load mash
-mash sketch -o cip-spuds.msh -p $PBS_NCPUS -s 20000 /g/data/xe2/projects/cip-potato/data/reads/runs/run-1/*.fastq.gz
+mash sketch -l cip-spuds.msh -p $PBS_NCPUS -s 20000 /g/data/xe2/projects/cip-potato/data/reads/runs/run-1/*.fastq.gz
 mash dist cip-spuds.msh cip-spuds.msh -t -p 28 > dist.txt
 
 ```
